@@ -136,7 +136,7 @@ function mmhgToKpa(mmhg) {
 function createMainContent(data) {
     console.log('创建主要内容，数据:', data);
     return `
-    <div class="title">AI Analysis</div>
+    <div class="title">Analysis</div>
         <!-- 7天提示 -->
         <div class="comparison-title" id="comparisonTitle">${CONFIG.text.comparisonTitle}</div>
         <div class="comparison-values">
