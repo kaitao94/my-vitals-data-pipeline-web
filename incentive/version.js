@@ -11,7 +11,7 @@ const APP_VERSION = {
     buildDate: '2026-01-27',
     
     // 更新日志
-    changelog: '修改ui文案',
+    changelog: 'Update UI text',
     
     // 获取完整版本信息
     getFullVersion: function() {

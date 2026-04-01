@@ -7,7 +7,7 @@ const CONFIG = {
 
     // 文本配置 - 所有显示的文本内容
     text: {
-        title: "血压监测报告",  // 页面标题
+        title: "Blood Pressure Monitoring Report",  // 页面标题
         comparisonTitle: "Comparison with your 7-day average",  // 7天对比标题
         systolicComparisonLabel: "Systolic",  // 收缩压对比标签
         diastolicComparisonLabel: "Diastolic",  // 舒张压对比标签
@@ -485,7 +485,7 @@ async function getIncentiveInfo() {
         })
             .then(response => {
                 if (!response.ok) {
-                    throw new Error('网络响应不正常');
+                    throw new Error('Network response error');
                 }
                 return response.json();
             })

@@ -614,13 +614,47 @@ async function handleSubmitButton() {
     setIncentiveFeedback(2, feedback, dontRemind)
 
 }
-function handleReminderChange() {
-    const reminderCheckbox = document.getElementById('reminderCheckbox');
 
-    if (reminderCheckbox.checked) {
-        setIncentiveFeedback(null, null, true)
-    } else {
-        setIncentiveFeedback(null, null, false)
+// 设置不再提醒
+async function setNoReminders(isNoReminders) {
+    const { baseUrl, token, phoneDataId, un } = moduleUrlParams;
+    try {
+        fetch(baseUrl + "api/common/data/incentive/setNoReminders", {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': 'ihealthapi ' + token,
+                'Un': un
+            },
+            body: JSON.stringify({
+                is_no_reminders: isNoReminders,
+            })
+        })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response error');
+                }
+                return response.json();
+            })
+            .then(data => {
+                if (data.ResultMessage == "100") {
+                    console.log('设置不再提醒成功');
+                    const successToast = createSuccessContent("success");  // 创建成功提示
+                    showToast(successToast);  // 显示成功toast
+                } else {
+                    const errorToast = createErrorContent(data.ResultMessage);
+                    showToast(errorToast);
+                }
+            })
+            .catch(error => {
+                console.error('设置不再提醒失败:', error);
+                const errorToast = createErrorContent(error.message);
+                showToast(errorToast);
+            });
+    } catch (error) {
+        console.error('设置不再提醒失败:', error);
+        const errorToast = createErrorContent(error.message);
+        showToast(errorToast);
     }
 }
 // 绑定事件函数
@@ -629,15 +663,11 @@ function bindEvents(data) {
     const likeButton = document.getElementById('likeButton');
     const dislikeButton = document.getElementById('dislikeButton');
     const submitButton = document.getElementById('submitButton');
-    const feedbackContainer = document.getElementById('feedbackContainer');
-    const reminderCheckbox = document.getElementById('reminderCheckbox');
 
     console.log('绑定事件:', {
         likeButton: likeButton,
         dislikeButton: dislikeButton,
-        submitButton: submitButton,
-        feedbackContainer: feedbackContainer,
-        reminderCheckbox: reminderCheckbox
+        submitButton: submitButton
     });
 
     // 绑定播放按钮事件
@@ -667,13 +697,6 @@ function bindEvents(data) {
         console.log('提交按钮事件已绑定');
     } else {
         console.error('提交按钮未找到');
-    }
-
-    if (reminderCheckbox) {
-        reminderCheckbox.addEventListener('change', handleReminderChange);
-        console.log('提醒复选框事件已绑定');
-    } else {
-        console.error('提醒复选框未找到');
     }
 }
 
@@ -714,7 +737,7 @@ async function getIncentiveInfo() {
         })
             .then(response => {
                 if (!response.ok) {
-                    throw new Error('网络响应不正常');
+                    throw new Error('Network response error');
                 }
                 return response.json();
             })
@@ -738,10 +761,9 @@ async function getIncentiveInfo() {
         mainContent.appendChild(errorEl);
     }
 }
-async function setIncentiveFeedback(commentType, commentContent, isDisableReminder) {
+async function setIncentiveFeedback(commentType, commentContent, dontRemind) {
     const { baseUrl, token, phoneDataId, un } = moduleUrlParams;
     try {
-        // const data = JSON.parse(dataText);
         fetch(baseUrl + "api/common/data/incentive/setIncentiveFeedback", {
             method: 'POST',
             headers: {
@@ -753,12 +775,11 @@ async function setIncentiveFeedback(commentType, commentContent, isDisableRemind
                 phone_data_id: phoneDataId,
                 comment_type: commentType,
                 comment_content: commentContent,
-                disable_reminder: isDisableReminder,
             })
         })
             .then(response => {
                 if (!response.ok) {
-                    throw new Error('网络响应不正常');
+                    throw new Error('Network response error');
                 }
                 return response.json();
             })
@@ -766,18 +787,21 @@ async function setIncentiveFeedback(commentType, commentContent, isDisableRemind
                 if (data.ResultMessage == "100") {
                     const successToast = createSuccessContent("success");  // 创建成功提示
                     if (commentType === 2 && commentContent && commentContent.trim().length > 0) {
-                        // 重置表单
-                        feedbackTextarea.value = '';
                         // 隐藏反馈区域
                         hideFeedbackContainer();
+                        // 调用setNoReminders接口，传递checkbox状态
+                        setNoReminders(dontRemind);
                     }
                     showToast(successToast);  // 显示成功toast
                 } else {
                     const errorToast = createErrorContent(data.ResultMessage);  // 创建错误提示
                     showToast(errorToast);  // 显示错误toast
                 }
-                submitButton.disabled = false;
-                submitButton.textContent = CONFIG.text.submitButton;
+                const submitButton = document.getElementById('submitButton');
+                if (submitButton) {
+                    submitButton.disabled = false;
+                    submitButton.textContent = CONFIG.text.submitButton;
+                }
             })
             .catch(error => {
                 console.error('设置激励信息失败:', error);
