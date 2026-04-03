@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="zh-CN">
+<html lang="en">
 
 <head>
     <meta charset="UTF-8">
@@ -13,81 +13,10 @@
             font-family: 'Segoe UI', 'Microsoft YaHei', sans-serif;
         }
 
-
-        header {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 75px;
-        }
-
-        .date {
-            font-size: 16px;
-            color: rgba(153, 153, 153, 1);
-        }
-
-        .logo {
-            font-size: 1.8rem;
-            font-weight: 700;
-            display: flex;
-            align-items: center;
-        }
-
-        .logo i {
-            margin-right: 10px;
-        }
-
         .main-content {
             padding: 16px 25px;
             background-color: rgba(255, 255, 255, 1);
             border-radius: 8px;
-        }
-
-        .bp-reading {
-            display: flex;
-            justify-content: center;
-            text-align: center;
-            flex-direction: row;
-            flex: 1;
-        }
-
-        .bp-value {
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            height: 52px;
-        }
-
-        .value {
-            font-size: 40px;
-            color: rgba(51, 51, 51, 1);
-            line-height: 36px;
-        }
-
-        .label {
-            font-size: 15px;
-            color: rgba(0, 0, 0, 1);
-            font-family: 'MiSans';
-        }
-
-        .divider {
-            width: 1px;
-            height: 52px;
-            background-color: rgba(51, 51, 51, 1);
-        }
-
-        .divider-small {
-            height: 18px;
-            background-color: rgba(217, 217, 217, 1);
-            width: 1px;
-        }
-
-        .separator {
-            height: 3px;
-            margin: 29px 0 18px 0;
-            border-radius: 4px;
-            transition: background-color 0.3s ease;
         }
 
         .title {
@@ -105,7 +34,6 @@
             font-size: 16px;
             color: rgba(0, 0, 0, 1);
             font-family: 'MiSans';
-
         }
 
         .comparison-values {
@@ -123,15 +51,28 @@
             flex-direction: row;
         }
 
+        .comparison-label {
+            font-size: 15px;
+            color: rgba(0, 0, 0, 1);
+            font-family: 'MiSans';
+        }
+
         .comparison-img {
             height: 18px;
             width: 18px;
             margin: 0 5px;
         }
 
-        .comparison-value {
+        .avg {
             font-size: 15px;
-            color: rgba(0, 0, 0, 1);
+            font-weight: bold;
+            font-family: 'MiSans';
+        }
+
+        .divider-small {
+            height: 18px;
+            background-color: rgba(217, 217, 217, 1);
+            width: 1px;
         }
 
         .ai-analysis {
@@ -150,6 +91,7 @@
             word-wrap: break-word;
             overflow-wrap: anywhere;
         }
+
         .ai-text .last-line-spacer {
             display: inline-block;
             width: 30px;
@@ -167,81 +109,12 @@
             cursor: pointer;
         }
 
-        .feedback-buttons {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            flex-direction: row;
-            margin: 24px 0 0 0;
-        }
-
-        .feedback-button {
-            width: 40px;
-            height: 40px;
-            border: 1px solid rgba(204, 204, 204, 1);
-            border-radius: 8px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            transition: all 0.2s;
-        }
-
-        .feedback-button.active {
-            border-color: rgba(73, 160, 217, 1);
-            background-color: rgba(73, 160, 217, 0.1);
-        }
-
-        .button-spacing {
-            width: 25px;
-        }
-
-        .feedback-icon {
-            height: 18px;
-            width: 18px;
-        }
-
         .ai-label-container {
             display: flex;
             align-items: center;
             justify-content: center;
             flex-direction: row;
             margin: 10px 0 15px 0;
-        }
-
-        /* 血压等级背景色样式 */
-        .bp-level-1 {
-            background-color: rgba(166, 207, 57, 1);
-            /* 正常 - 绿色 */
-        }
-
-        .bp-level-2 {
-            background-color: rgba(244, 175, 0, 1);
-            /* 升高/偏高 - 橙色 */
-        }
-
-        .bp-level-3 {
-            background-color: rgba(255, 140, 0, 1);
-            /* 高血压一期 - 橙红色 */
-        }
-
-        .bp-level-4 {
-            background-color: rgba(186, 58, 2, 1);
-            /* 高血压二期 - 红色 */
-        }
-
-        /* 反馈区域样式 */
-        .feedback-container {
-            transition: all 0.3s ease-in-out;
-            opacity: 0;
-            max-height: 0;
-            overflow: hidden;
-        }
-
-        .feedback-container.show {
-            opacity: 1;
-            max-height: 300px;
-            margin-top: 20px;
         }
 
         .ai-label {
@@ -263,79 +136,6 @@
             font-family: 'MiSans';
         }
 
-        .feedback-textarea {
-            white-space: pre-wrap;
-            word-wrap: break-word;
-            flex: 1;
-            width: 100%;
-            min-height: 60px;
-            border: 1px solid rgba(217, 217, 217, 1);
-            border-radius: 8px;
-            padding: 10px;
-            text-align: left;
-            resize: vertical;
-            font-family: inherit;
-            font-size: 14px;
-            line-height: 1.4;
-            outline: none;
-        }
-
-        .feedback-textarea:focus {
-            border-color: #1890ff;
-            box-shadow: 0 0 0 2px rgba(24, 144, 255, 0.2);
-        }
-
-        .reminder {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin-top: 13px;
-            color: rgba(153, 153, 153, 1);
-            font-size: 14px;
-            margin-bottom: 15px;
-        }
-
-        .checkbox {
-            margin-right: 8px;
-            width: 20px;
-            height: 20px;
-            accent-color: rgba(217, 217, 217, 1);
-            cursor: pointer;
-        }
-
-        .feedback-btn {
-            background: rgba(73, 160, 217, 1);
-            color: white;
-            border-radius: 20px;
-            font-size: 14px;
-            width: 100%;
-            height: 40px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin: 20px 0 15px 0;
-            cursor: pointer;
-            transition: background-color 0.3s;
-            border: none;
-        }
-
-        .feedback-btn:hover {
-            background: rgba(60, 140, 200, 1);
-        }
-
-        .feedback-btn:disabled {
-            background: rgba(204, 204, 204, 1);
-            cursor: not-allowed;
-        }
-
-        footer {
-            text-align: center;
-            padding: 20px;
-            color: #888;
-            font-size: 0.9rem;
-            border-top: 1px solid #eee;
-        }
-
         .loading {
             display: flex;
             justify-content: center;
@@ -354,7 +154,7 @@
             margin: 20px 0;
         }
 
-        /* Toast样式 - 类似Android/iOS */
+        /* Toast styles */
         .toast {
             position: fixed;
             top: 50%;
@@ -374,19 +174,9 @@
             animation: toastFadeIn 0.3s ease-out;
         }
 
-        .toast-success {
-            background: rgba(00, 00, 00, 0.8);
-        }
-
+        .toast-success,
         .toast-error {
-            background: rgba(00, 00, 00, 0.8);
-        }
-
-        .toast-icon {
-            font-size: 20px;
-            font-weight: bold;
-            margin-right: 12px;
-            flex-shrink: 0;
+            background: rgba(0, 0, 0, 0.8);
         }
 
         .toast-message {
@@ -400,7 +190,6 @@
                 opacity: 0;
                 transform: translate(-50%, -50%) scale(0.8);
             }
-
             to {
                 opacity: 1;
                 transform: translate(-50%, -50%) scale(1);
@@ -412,7 +201,6 @@
                 opacity: 1;
                 transform: translate(-50%, -50%) scale(1);
             }
-
             to {
                 opacity: 0;
                 transform: translate(-50%, -50%) scale(0.8);
@@ -422,38 +210,28 @@
         .toast.fade-out {
             animation: toastFadeOut 0.3s ease-in forwards;
         }
-        .avg {
-            font-size: 15px;
-            font-weight: bold;
-            font-family: 'MiSans';
-        }
-         .comparison-label {
-            font-size: 15px;
-            color: rgba(0, 0, 0, 1);
-            font-family: 'MiSans';
-        }
     </style>
 </head>
 
 <body>
     <div class="main-content">
         <div class="title">Analysis</div>
-        <!-- 7天提示 -->
+        <!-- 7-day comparison -->
         <div class="comparison-title">Comparison with your 7-day average</div>
         <div class="comparison-values">
             <div class="comparison-item">
                 <div class="comparison-label">Systolic</div>
-                <img class="comparison-img" id="systolicArrow"  alt="Up arrow">
+                <img class="comparison-img" id="systolicArrow" alt="Up arrow">
                 <div class="avg" id="systolicDiff">--</div>
             </div>
             <div class="divider-small"></div>
             <div class="comparison-item">
                 <div class="comparison-label">Diastolic</div>
-                <img class="comparison-img" id="diastolicArrow"  alt="Down arrow">
+                <img class="comparison-img" id="diastolicArrow" alt="Down arrow">
                 <div class="avg" id="diastolicDiff">--</div>
             </div>
         </div>
-        <!-- AI分析 -->
+        <!-- AI Analysis -->
         <div class="ai-analysis">
             <div class="ai-text" id="aiAnalysisText"></div>
             <img class="play-icon" id="playIcon" src="./icon_play.png" alt="Play icon">
@@ -463,7 +241,6 @@
             <div class="ai-label">Text generated by AI</div>
             <div class="beta-badge">beta</div>
         </div>
-
     </div>
 
     <script src="../version.js"></script>
