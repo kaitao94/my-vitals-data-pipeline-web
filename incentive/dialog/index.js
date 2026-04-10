@@ -44,6 +44,22 @@ const CONFIG = {
         stopIcon: "./icon_stop.png"  // 停止图标
     },
 
+    // 血压等级颜色配置
+    bpLevelColors: {
+        legacy: {
+            1: 'rgba(166, 207, 57, 1)',
+            2: '#FFEC00',
+            3: 'rgba(255, 140, 0, 1)',
+            4: 'rgba(186, 58, 2, 1)'
+        },
+        modern: {
+            1: 'rgba(149, 201, 109, 1)',
+            2: 'rgba(209, 220, 112, 1)',
+            3: 'rgba(245, 198, 96, 1)',
+            4: 'rgba(236, 144, 85, 1)'
+        }
+    },
+
     // API配置 - 后端接口地址
     api: {
         fetchData: "/api/blood-pressure",  // 获取血压数据接口
@@ -56,7 +72,8 @@ const CONFIG = {
             measurement_time: "",  // 默认日期
             high_pressure: 0,  // 默认收缩压
             low_pressure: 0,  // 默认舒张压
-            heart_rate: 0  // 默认心率
+            heart_rate: 0,  // 默认心率
+            version: ""  // 默认版本号
         },
         incentive_data: {
             AvgHigh: 0,  // 默认收缩压差值
@@ -116,6 +133,49 @@ function updateImageSource(elementId, src, alt = '') {
     }
 }
 
+function compareVersionSegments(currentSegments, targetSegments) {
+    const maxLength = Math.max(currentSegments.length, targetSegments.length);
+    for (let i = 0; i < maxLength; i++) {
+        const current = currentSegments[i] || 0;
+        const target = targetSegments[i] || 0;
+        if (current > target) return 1;
+        if (current < target) return -1;
+    }
+    return 0;
+}
+
+function shouldUseModernBpLevelColors(version) {
+    if (!version || typeof version !== 'string') {
+        return false;
+    }
+
+    const normalizedVersion = version.trim().toUpperCase();
+    const match = normalizedVersion.match(/^(AIH|IH)(\d+(?:\.\d+)*)$/);
+    if (!match) {
+        return false;
+    }
+
+    const versionType = match[1];
+    const currentSegments = match[2].split('.').map(segment => parseInt(segment, 10) || 0);
+    const targetVersion = versionType === 'AIH' ? '4.14.4' : '4.14.2';
+    const targetSegments = targetVersion.split('.').map(segment => parseInt(segment, 10));
+
+    return compareVersionSegments(currentSegments, targetSegments) >= 0;
+}
+
+function applyBpLevelColor(bpLevel, version) {
+    const bpLevelElement = document.getElementById('bpLevel');
+    if (!bpLevelElement) {
+        return;
+    }
+
+    const colorPalette = shouldUseModernBpLevelColors(version)
+        ? CONFIG.bpLevelColors.modern
+        : CONFIG.bpLevelColors.legacy;
+
+    bpLevelElement.style.backgroundColor = colorPalette[bpLevel] || '';
+}
+
 // 更新页面数据函数
 function updatePageData(data) {
     const { timeFormat, bpUnit } = moduleUrlParams;
@@ -128,17 +188,11 @@ function updatePageData(data) {
     updateAiText(data.incentive_data.VoiceText);  // 更新AI分析文本
     updateTextContent('systolicLabel', bpUnit === 'mmHg' ? '(mmHg)' : '(kPa)');  // 更新收缩压单位
     updateTextContent('diastolicLabel', bpUnit === 'mmHg' ? '(mmHg)' : '(kPa)');  // 更新舒张压单位
-    // 根据血压等级设置背景色
-    const bpLevelElement = document.getElementById('bpLevel');
-    if (bpLevelElement) {
-        // 移除之前的等级类
-        bpLevelElement.classList.remove('bp-level-1', 'bp-level-2', 'bp-level-3', 'bp-level-4');
-
-        // 添加当前等级类
-        const bpLevel = data.incentive_data.BpLevel;
-        if (bpLevel >= 1 && bpLevel <= 4) {
-            bpLevelElement.classList.add(`bp-level-${bpLevel}`);
-        }
+    // 根据血压等级和版本设置背景色
+    const bpLevel = data.incentive_data.BpLevel;
+    const version = data.blood_pressure_data.version;
+    if (bpLevel >= 1 && bpLevel <= 4) {
+        applyBpLevelColor(bpLevel, version);
     }
 
     // 更新箭头图片
